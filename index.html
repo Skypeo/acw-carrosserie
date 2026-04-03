@@ -63,18 +63,20 @@
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-        .nav__logo { height: 32px; transition: height 0.4s ease, filter 0.4s ease; filter: brightness(0) invert(1); }
-        .nav.scrolled .nav__logo { height: 26px; }
+        .nav__logo { height: 32px; transition: height 0.4s ease, filter 0.4s ease; }
+        .nav.scrolled .nav__logo { height: 26px; filter: brightness(0) invert(1); }
         .nav__links { display: flex; gap: 2rem; align-items: center; }
         .nav__links a {
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: rgba(255,255,255,0.7);
-            transition: color 0.3s ease;
+            color: var(--grey-700);
+            transition: color 0.4s ease;
         }
-        .nav__links a:hover { color: var(--white); }
+        .nav__links a:hover { color: var(--black); }
+        .nav.scrolled .nav__links a { color: rgba(255,255,255,0.7); }
+        .nav.scrolled .nav__links a:hover { color: var(--white); }
         .nav__cta-link {
             font-size: 0.7rem;
             font-weight: 700;
@@ -97,9 +99,10 @@
             z-index: 1001;
         }
         .nav__burger span {
-            display: block; width: 28px; height: 2px; background: var(--white);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            display: block; width: 28px; height: 2px; background: var(--black);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background 0.4s ease;
         }
+        .nav.scrolled .nav__burger span { background: var(--white); }
         .nav__burger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
         .nav__burger.active span:nth-child(2) { opacity: 0; }
         .nav__burger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
@@ -128,87 +131,222 @@
             .nav__burger { display: flex; }
         }
 
-        /* ====== HERO — Full-screen cinematic ====== */
+        /* ====== HERO — Awwwards layout ====== */
         .hero {
             position: relative;
-            height: 100vh;
-            min-height: 600px;
-            display: flex;
-            align-items: flex-end;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             overflow: hidden;
-            background: var(--black);
+            background: var(--off-white);
+            padding-top: 72px;
         }
-        .hero__bg {
+        /* Badge rotatif — flotte au-dessus de l'image principale */
+        .hero__badge-wrap {
             position: absolute;
-            inset: 0;
-            z-index: 1;
-        }
-        .hero__bg img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            filter: brightness(0.35) contrast(1.1);
-            scale: 1.08;
-            animation: heroScale 8s ease-out forwards;
-        }
-        @keyframes heroScale { to { scale: 1; } }
-        .hero__overlay {
-            position: absolute; inset: 0; z-index: 2;
-            background:
-                linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.3) 40%, transparent 70%),
-                linear-gradient(135deg, rgba(227,6,19,0.08) 0%, transparent 50%);
-        }
-        .hero__content {
-            position: relative; z-index: 3;
-            padding: clamp(2rem, 5vw, 5rem) clamp(1.5rem, 4vw, 4rem);
-            padding-bottom: clamp(4rem, 8vw, 7rem);
-            max-width: 900px;
-        }
-        .hero__accent {
-            font-family: var(--font-accent);
-            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-            color: var(--red);
-            margin-bottom: 0.8rem;
+            top: clamp(90px, 14vh, 140px);
+            left: -30px;
+            z-index: 12;
             opacity: 0;
-            animation: fadeSlideUp 0.8s ease 0.4s forwards;
+            animation: fadeSlideUp 0.8s ease 1.1s forwards;
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.15));
         }
-        .hero__title {
-            font-family: var(--font-display);
-            font-size: clamp(3.5rem, 9vw, 8rem);
-            line-height: 0.9;
-            color: var(--white);
-            margin-bottom: 1.5rem;
+        .hero__badge-spin {
+            width: 130px; height: 130px;
+            animation: spinBadge 12s linear infinite;
         }
-        .hero__title .line {
-            display: block;
-            overflow: hidden;
+        @keyframes spinBadge { to { transform: rotate(360deg); } }
+        /* Texte */
+        .hero__text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: clamp(3rem, 5vw, 6rem);
+            padding-bottom: clamp(8rem, 12vw, 12rem);
+            z-index: 5;
         }
-        .hero__title .line span {
-            display: block;
-            transform: translateY(110%);
-            animation: lineReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .hero__title .line:nth-child(2) span { animation-delay: 0.15s; }
-        .hero__title .line:nth-child(3) span { animation-delay: 0.3s; }
-        @keyframes lineReveal { to { transform: translateY(0); } }
-        .hero__title em {
-            font-style: normal;
-            color: var(--red);
-        }
-        .hero__subtitle {
-            font-size: clamp(0.95rem, 1.3vw, 1.1rem);
-            font-weight: 300;
-            color: rgba(255,255,255,0.6);
-            max-width: 500px;
-            line-height: 1.7;
+        .hero__logo {
+            height: clamp(36px, 5vw, 50px);
             margin-bottom: 2.5rem;
             opacity: 0;
-            animation: fadeSlideUp 0.8s ease 0.6s forwards;
+            animation: fadeSlideUp 0.7s ease 0.15s forwards;
+        }
+        .hero__title-wrap {
+            margin-bottom: 1.2rem;
+        }
+        .hero__t1, .hero__t2, .hero__t3 {
+            display: block;
+            overflow: hidden;
+        }
+        .hero__t1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 4.5vw, 4rem);
+            line-height: 1;
+            color: var(--black);
+            opacity: 0;
+            animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+        }
+        .hero__t2 {
+            font-family: var(--font-accent);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            line-height: 1.15;
+            color: var(--red);
+            margin: 0.1em 0;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+        }
+        .hero__t3 {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 4.5vw, 4rem);
+            line-height: 1;
+            color: var(--black);
+            opacity: 0;
+            animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+        }
+        .hero__location {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--grey-500);
+            letter-spacing: 0.03em;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeSlideUp 0.7s ease 0.65s forwards;
         }
         .hero__actions {
-            display: flex; gap: 1.5rem; align-items: center;
+            display: flex; gap: 1rem; align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease 0.75s forwards;
+        }
+        .hero__reseau {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             flex-wrap: wrap;
             opacity: 0;
-            animation: fadeSlideUp 0.8s ease 0.8s forwards;
+            animation: fadeSlideUp 0.8s ease 0.9s forwards;
+        }
+        .hero__reseau-text {
+            font-family: var(--font-accent);
+            font-size: clamp(1rem, 1.8vw, 1.3rem);
+            color: var(--grey-700);
+        }
+        .hero__reseau img {
+            height: clamp(32px, 4vw, 44px);
+        }
+        /* Images — compositions superposées */
+        .hero__visuals {
+            position: relative;
+            z-index: 4;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+        }
+        .hero__img-main {
+            position: absolute;
+            top: 72px; right: -40px; bottom: 80px;
+            width: 70%;
+            z-index: 2;
+        }
+        .hero__img-main img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 24px 0 0 24px;
+            opacity: 0;
+            animation: imgReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards, floatMain 6s ease-in-out 1.5s infinite;
+        }
+        @keyframes floatMain {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .hero__img-float {
+            position: absolute;
+            bottom: 40px; left: -20px;
+            width: 55%;
+            height: 45%;
+            z-index: 6;
+        }
+        .hero__img-float img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 5px solid var(--off-white);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+            opacity: 0;
+            animation: imgFloat 1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards, floatSecondary 7s ease-in-out 2s infinite;
+        }
+        @keyframes floatSecondary {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(6px, -8px); }
+        }
+        .hero__img-mini {
+            position: absolute;
+            top: 100px; left: 10px;
+            width: 28%;
+            height: 25%;
+            z-index: 5;
+        }
+        .hero__img-mini img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 4px solid var(--off-white);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+            opacity: 0;
+            animation: imgMini 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards, floatMini 5s ease-in-out 2.5s infinite;
+        }
+        @keyframes floatMini {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-5px, -6px) rotate(1deg); }
+        }
+        @keyframes imgReveal {
+            from { opacity: 0; transform: translateX(60px) scale(0.96); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes imgFloat {
+            from { opacity: 0; transform: translate(-30px, 30px) scale(0.92) rotate(-2deg); }
+            to { opacity: 1; transform: translate(0,0) scale(1) rotate(0deg); }
+        }
+        @keyframes imgMini {
+            from { opacity: 0; transform: translate(-20px, -20px) scale(0.9); }
+            to { opacity: 1; transform: translate(0,0) scale(1); }
+        }
+        .btn--outline-dark {
+            background: transparent;
+            color: var(--black);
+            border: 1.5px solid var(--grey-300);
+        }
+        .btn--outline-dark:hover {
+            border-color: var(--black);
+            background: rgba(0,0,0,0.03);
+            transform: translateY(-2px);
+        }
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                min-height: auto;
+                padding-top: 72px;
+            }
+            .hero__visuals {
+                position: relative;
+                height: 55vh;
+                min-height: 350px;
+                order: -1;
+            }
+            .hero__img-main {
+                top: 0; right: -20px; bottom: 0;
+                width: 75%;
+            }
+            .hero__img-float {
+                bottom: -20px; left: 10px;
+                width: 50%; height: 40%;
+            }
+            .hero__img-mini { display: none; }
+            .hero__badge-spin { display: none; }
+            .hero__text {
+                padding: 2rem clamp(1.5rem, 4vw, 3rem) 3rem;
+            }
         }
         @keyframes fadeSlideUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -230,32 +368,7 @@
         .btn--ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.08); transform: translateY(-2px); }
         .btn svg { transition: transform 0.3s ease; }
         .btn:hover svg { transform: translateX(4px); }
-        .hero__scroll {
-            position: absolute; bottom: 2rem; right: clamp(1.5rem, 4vw, 4rem);
-            z-index: 3;
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
-        }
-        .hero__scroll span {
-            writing-mode: vertical-rl;
-            font-size: 0.6rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.25em;
-            color: rgba(255,255,255,0.4);
-        }
-        .hero__scroll-line {
-            width: 1px; height: 50px;
-            background: rgba(255,255,255,0.15);
-            position: relative; overflow: hidden;
-        }
-        .hero__scroll-line::after {
-            content: ''; position: absolute;
-            top: -100%; left: 0; width: 100%; height: 100%;
-            background: var(--red);
-            animation: scrollPulse 2s ease-in-out infinite;
-        }
-        @keyframes scrollPulse { 0% { top: -100%; } 50%,100% { top: 100%; } }
-        @media (max-width: 768px) {
-            .hero__scroll { display: none; }
-        }
+        /* hero scroll supprimé — layout split */
 
         /* ====== OFFERS BANNER — Black circles on metallic bg ====== */
         .offers-banner {
@@ -832,7 +945,8 @@
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .footer__logos { display: flex; align-items: center; gap: 2rem; }
-        .footer__logos img { height: 28px; filter: brightness(0) invert(1); opacity: 0.5; }
+        .footer__logos img:first-child { height: 28px; filter: brightness(0) invert(1); opacity: 0.6; }
+        .footer__logos img:last-child { height: 36px; opacity: 0.8; }
         .footer__links { display: flex; gap: 2rem; }
         .footer__links a {
             font-size: 0.75rem; color: var(--grey-500);
@@ -908,29 +1022,63 @@
 </div>
 
 <!-- ==================== HERO ==================== -->
-<section class="hero">
-    <div class="hero__bg">
-        <img src="https://www.acw-carrosserie.fr/media/images/upload/box3.jpg" alt="Carrosserie automobile — ACW Gérardmer">
-    </div>
-    <div class="hero__overlay"></div>
-    <div class="hero__content">
-        <p class="hero__accent">Votre artisan carrossier à Gérardmer</p>
-        <h1 class="hero__title">
-            <span class="line"><span>CARROSSERIE</span></span>
-            <span class="line"><span>À <em>GÉRARDMER</em></span></span>
+<section class="hero" id="heroSection">
+    <!-- Badge rotatif (entre les images) -->
+    <!-- Contenu texte -->
+    <div class="hero__text" data-parallax-layer="0.02">
+        <img src="https://www.acw-carrosserie.fr/smarty/wireframe24/media/images/logo.png" alt="ACW Carrosserie" class="hero__logo">
+        <h1 class="hero__title-wrap">
+            <span class="hero__t1">Choisir librement</span>
+            <span class="hero__t2">votre Carrossier,</span>
+            <span class="hero__t3">c'est votre droit !</span>
         </h1>
-        <p class="hero__subtitle">Une entreprise automobile fiable née d'une passion. ACW Carrosserie intervient sur motos, voitures familiales, citadines, utilitaires professionnels, 4x4…</p>
+        <p class="hero__location">Carrossier à Gérardmer — Vosges</p>
         <div class="hero__actions">
             <a href="#contact" class="btn btn--red">
-                Prendre rendez-vous
+                Contactez-nous
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href="tel:0329501959" class="btn btn--ghost">03 29 50 19 59</a>
+            <a href="tel:0329501959" class="btn btn--outline-dark">03 29 50 19 59</a>
+        </div>
+        <div class="hero__reseau">
+            <span class="hero__reseau-text">ACW membre du réseau</span>
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/logo-carrossery-pare-brise.png" alt="Ze Carrossery & Ze Pare-Brise">
         </div>
     </div>
-    <div class="hero__scroll">
-        <span>Scroll</span>
-        <div class="hero__scroll-line"></div>
+    <!-- Images -->
+    <div class="hero__visuals">
+        <div class="hero__img-main" data-parallax-layer="-0.03">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/box3.jpg" alt="Polissage carrosserie rouge">
+        </div>
+        <div class="hero__img-float" data-parallax-layer="0.05">
+            <img src="https://www.acw-carrosserie.fr/media/images/gallery/26/big/29.jpg" alt="Alexis préparant la peinture">
+        </div>
+        <div class="hero__img-mini" data-parallax-layer="-0.04">
+            <img src="https://www.acw-carrosserie.fr/media/images/gallery/26/big/30.jpg" alt="Cabine de peinture">
+        </div>
+        <div class="hero__badge-wrap">
+            <div class="hero__badge-spin">
+                <svg viewBox="0 0 220 220" width="140" height="140">
+                    <defs>
+                        <path id="textCircle" d="M110,110 m-85,0 a85,85 0 1,1 170,0 a85,85 0 1,1 -170,0"/>
+                    </defs>
+                    <!-- Fond blanc -->
+                    <circle cx="110" cy="110" r="105" fill="white"/>
+                    <!-- Bordure rouge épaisse -->
+                    <circle cx="110" cy="110" r="105" fill="none" stroke="#E30613" stroke-width="3"/>
+                    <!-- Cercle intérieur décoratif -->
+                    <circle cx="110" cy="110" r="88" fill="none" stroke="#E30613" stroke-width="0.8" stroke-dasharray="4 4"/>
+                    <!-- Point rouge central -->
+                    <circle cx="110" cy="110" r="28" fill="#E30613"/>
+                    <text x="110" y="107" text-anchor="middle" fill="white" font-family="Source Sans 3, sans-serif" font-size="11" font-weight="700" letter-spacing="1">DEPUIS</text>
+                    <text x="110" y="122" text-anchor="middle" fill="white" font-family="Bebas Neue, sans-serif" font-size="18">2015</text>
+                    <!-- Texte circulaire -->
+                    <text fill="#E30613" font-size="14" font-family="Source Sans 3, sans-serif" font-weight="700" letter-spacing="6">
+                        <textPath href="#textCircle">CARROSSERIE • GÉRARDMER • VOSGES •</textPath>
+                    </text>
+                </svg>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -1099,7 +1247,7 @@
             <p>Votre artisan carrossier est en mesure de fournir des conseils avisés et des solutions innovantes pour répondre aux besoins de chaque projet de réparation de carrosserie automobile, tout en assurant un excellent rapport qualité-prix.</p>
         </div>
         <div class="about__img">
-            <img src="https://www.acw-carrosserie.fr/media/images/gallery/26/big/30.jpg" alt="Cabine de peinture — ACW Carrosserie" loading="lazy">
+            <img src="https://www.acw-carrosserie.fr/media/images/img-content.jpg" alt="ACW Carrosserie — Atelier à Gérardmer" loading="lazy">
         </div>
     </div>
 </section>
@@ -1347,16 +1495,23 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     });
 });
 
-// Parallax hero
-window.addEventListener('scroll', () => {
-    const heroImg = document.querySelector('.hero__bg img');
-    if (heroImg) {
-        const y = window.scrollY;
-        if (y < window.innerHeight) {
-            heroImg.style.transform = `translateY(${y * 0.25}px)`;
-        }
+// Mouse parallax on hero (desktop)
+if (window.matchMedia('(pointer: fine)').matches) {
+    const heroSection = document.getElementById('heroSection');
+    if (heroSection) {
+        heroSection.addEventListener('mousemove', e => {
+            const rect = heroSection.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            heroSection.querySelectorAll('[data-parallax-layer]').forEach(el => {
+                const speed = parseFloat(el.dataset.parallaxLayer);
+                const tx = x * speed * 600;
+                const ty = y * speed * 600;
+                el.style.transform = `translate(${tx}px, ${ty}px)`;
+            });
+        });
     }
-}, { passive: true });
+}
 
 // 3D Tilt on service cards (desktop only)
 if (window.matchMedia('(pointer: fine)').matches) {
