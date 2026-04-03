@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACW Carrosserie — Gérardmer</title>
+    <meta name="description" content="ACW Carrosserie, votre carrossier à Gérardmer. Réparation carrosserie, peinture automobile, débosselage, pare-brise, pneus.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Damion&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #E30613;
+            --red-dark: #B8050F;
+            --black: #0A0A0A;
+            --off-white: #F5F5F0;
+            --white: #FFFFFF;
+            --grey-900: #1A1A1A;
+            --grey-800: #222222;
+            --grey-700: #444444;
+            --grey-500: #777777;
+            --grey-300: #AAAAAA;
+            --grey-100: #EBEBEB;
+            --teal: #00B4B6;
+            --font-display: 'Bebas Neue', sans-serif;
+            --font-accent: 'Damion', cursive;
+            --font-body: 'Source Sans 3', sans-serif;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body {
+            font-family: var(--font-body);
+            color: var(--black);
+            background: var(--off-white);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { font-family: inherit; cursor: pointer; }
+
+        /* progress bar supprimée */
+
+        /* ====== NAVIGATION ====== */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 72px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(1.5rem, 4vw, 4rem);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            background: transparent;
+        }
+        .nav.scrolled {
+            height: 56px;
+            background: rgba(10,10,10,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .nav__logo { height: 32px; transition: height 0.4s ease, filter 0.4s ease; filter: brightness(0) invert(1); }
+        .nav.scrolled .nav__logo { height: 26px; }
+        .nav__links { display: flex; gap: 2rem; align-items: center; }
+        .nav__links a {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.3s ease;
+        }
+        .nav__links a:hover { color: var(--white); }
+        .nav__cta-link {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--white);
+            background: var(--red);
+            padding: 10px 24px;
+            border-radius: 8px;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+        }
+        .nav__cta-link:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(227,6,19,0.35); }
+        .nav__burger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+        }
+        .nav__burger span {
+            display: block; width: 28px; height: 2px; background: var(--white);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        .nav__burger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .nav__burger.active span:nth-child(2) { opacity: 0; }
+        .nav__burger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .nav__mobile {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--black);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .nav__mobile.open { opacity: 1; pointer-events: auto; }
+        .nav__mobile a {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: var(--white);
+        }
+        .nav__mobile a:hover { color: var(--red); }
+        @media (max-width: 900px) {
+            .nav__links, .nav__cta-link { display: none !important; }
+            .nav__burger { display: flex; }
+        }
+
+        /* ====== HERO — Full-screen cinematic ====== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+            background: var(--black);
+        }
+        .hero__bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+        .hero__bg img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: brightness(0.35) contrast(1.1);
+            scale: 1.08;
+            animation: heroScale 8s ease-out forwards;
+        }
+        @keyframes heroScale { to { scale: 1; } }
+        .hero__overlay {
+            position: absolute; inset: 0; z-index: 2;
+            background:
+                linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.3) 40%, transparent 70%),
+                linear-gradient(135deg, rgba(227,6,19,0.08) 0%, transparent 50%);
+        }
+        .hero__content {
+            position: relative; z-index: 3;
+            padding: clamp(2rem, 5vw, 5rem) clamp(1.5rem, 4vw, 4rem);
+            padding-bottom: clamp(4rem, 8vw, 7rem);
+            max-width: 900px;
+        }
+        .hero__accent {
+            font-family: var(--font-accent);
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--red);
+            margin-bottom: 0.8rem;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease 0.4s forwards;
+        }
+        .hero__title {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 9vw, 8rem);
+            line-height: 0.9;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+        .hero__title .line {
+            display: block;
+            overflow: hidden;
+        }
+        .hero__title .line span {
+            display: block;
+            transform: translateY(110%);
+            animation: lineReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .hero__title .line:nth-child(2) span { animation-delay: 0.15s; }
+        .hero__title .line:nth-child(3) span { animation-delay: 0.3s; }
+        @keyframes lineReveal { to { transform: translateY(0); } }
+        .hero__title em {
+            font-style: normal;
+            color: var(--red);
+        }
+        .hero__subtitle {
+            font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+            font-weight: 300;
+            color: rgba(255,255,255,0.6);
+            max-width: 500px;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease 0.6s forwards;
+        }
+        .hero__actions {
+            display: flex; gap: 1.5rem; align-items: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease 0.8s forwards;
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn {
+            font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            padding: 16px 36px;
+            border: none;
+            border-radius: 10px;
+            display: inline-flex; align-items: center; gap: 10px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative; overflow: hidden;
+        }
+        .btn--red { background: var(--red); color: var(--white); }
+        .btn--red:hover { background: var(--red-dark); transform: translateY(-3px); box-shadow: 0 12px 35px rgba(227,6,19,0.35); }
+        .btn--ghost { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.3); }
+        .btn--ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+        .btn svg { transition: transform 0.3s ease; }
+        .btn:hover svg { transform: translateX(4px); }
+        .hero__scroll {
+            position: absolute; bottom: 2rem; right: clamp(1.5rem, 4vw, 4rem);
+            z-index: 3;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .hero__scroll span {
+            writing-mode: vertical-rl;
+            font-size: 0.6rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.25em;
+            color: rgba(255,255,255,0.4);
+        }
+        .hero__scroll-line {
+            width: 1px; height: 50px;
+            background: rgba(255,255,255,0.15);
+            position: relative; overflow: hidden;
+        }
+        .hero__scroll-line::after {
+            content: ''; position: absolute;
+            top: -100%; left: 0; width: 100%; height: 100%;
+            background: var(--red);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+        @keyframes scrollPulse { 0% { top: -100%; } 50%,100% { top: 100%; } }
+        @media (max-width: 768px) {
+            .hero__scroll { display: none; }
+        }
+
+        /* ====== OFFERS BANNER — Black circles on metallic bg ====== */
+        .offers-banner {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(3rem, 5vw, 5rem) clamp(1.5rem, 4vw, 4rem);
+        }
+        .offers-banner__bg {
+            position: absolute; inset: 0; z-index: 0;
+        }
+        .offers-banner__bg img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: brightness(0.5) contrast(1.2);
+        }
+        .offers-banner__overlay {
+            position: absolute; inset: 0; z-index: 1;
+            background: linear-gradient(135deg, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.3) 100%);
+        }
+        .offers-banner__top-line {
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 4px; background: var(--red); z-index: 3;
+        }
+        .offers-banner__bottom-line {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 4px; background: var(--teal); z-index: 3;
+        }
+        .offers-banner__content {
+            position: relative; z-index: 2;
+            text-align: center;
+        }
+        .offers-banner__reseau {
+            display: flex; align-items: center; justify-content: center;
+            gap: 1rem; flex-wrap: wrap;
+            margin-bottom: clamp(2rem, 4vw, 3rem);
+        }
+        .offers-banner__reseau-text {
+            font-family: var(--font-accent);
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            color: var(--white);
+        }
+        .offers-banner__reseau img {
+            height: clamp(40px, 6vw, 60px);
+        }
+        .offers-banner__circles {
+            display: flex;
+            justify-content: center;
+            gap: clamp(2rem, 5vw, 4rem);
+            flex-wrap: wrap;
+        }
+        .offer-circle {
+            width: clamp(180px, 22vw, 240px);
+            height: clamp(180px, 22vw, 240px);
+            background: var(--black);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+        }
+        .offer-circle:hover {
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .offer-circle__icon {
+            margin-bottom: 0.5rem;
+        }
+        .offer-circle__icon svg {
+            width: 28px; height: 28px;
+            stroke: var(--white); fill: none; stroke-width: 1.5;
+        }
+        .offer-circle__question {
+            font-size: clamp(0.6rem, 1vw, 0.75rem);
+            font-weight: 300;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 0.3rem;
+        }
+        .offer-circle__title {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 0.4rem;
+        }
+        .offer-circle__amount-label {
+            font-size: clamp(0.55rem, 0.9vw, 0.7rem);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.5);
+        }
+        .offer-circle__amount {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            color: var(--white);
+            line-height: 1;
+        }
+
+        /* ====== SECTION UTILITY ====== */
+        .section-pad {
+            padding: clamp(5rem, 10vw, 9rem) clamp(1.5rem, 4vw, 4rem);
+        }
+        .section-label {
+            font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.2em;
+            color: var(--red);
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 1rem;
+        }
+        .section-label::before {
+            content: ''; width: 40px; height: 2px; background: var(--red);
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
+            line-height: 0.95;
+        }
+        .section-title--white { color: var(--white); }
+
+        /* ====== SERVICES — Asymmetric bento ====== */
+        .services { background: var(--off-white); }
+        .services__header {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            flex-wrap: wrap; gap: 2rem;
+            margin-bottom: clamp(3rem, 5vw, 5rem);
+        }
+        .services__header p {
+            font-size: 0.92rem; font-weight: 300;
+            color: var(--grey-500); max-width: 380px; line-height: 1.7;
+        }
+        .services__grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: minmax(260px, auto);
+            gap: 12px;
+        }
+        .s-card {
+            position: relative; overflow: hidden;
+            background: var(--grey-800);
+            border-radius: 14px;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+        }
+        .s-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
+        .s-card--xl { grid-column: span 2; grid-row: span 2; }
+        .s-card img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 14px;
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+        }
+        .s-card:hover img { transform: scale(1.06); filter: brightness(0.7); }
+        .s-card__info {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.05) 55%);
+            border-radius: 14px;
+            display: flex; flex-direction: column;
+            justify-content: flex-end;
+            padding: clamp(1.2rem, 2vw, 2rem);
+            transition: background 0.5s ease;
+        }
+        .s-card:hover .s-card__info {
+            background: linear-gradient(to top, rgba(227,6,19,0.85) 0%, rgba(227,6,19,0.02) 65%);
+        }
+        .s-card__num {
+            position: absolute; top: 1rem; left: 1.2rem;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0.05em;
+        }
+        .s-card__title {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+            color: var(--white);
+            margin-bottom: 0.3rem;
+        }
+        .s-card--xl .s-card__title {
+            font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+        }
+        .s-card__sub {
+            font-size: 0.78rem; font-weight: 300;
+            color: rgba(255,255,255,0.6);
+        }
+        .s-card__arrow {
+            position: absolute; bottom: 1.2rem; right: 1.2rem;
+            width: 36px; height: 36px;
+            border: 1.5px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0; transform: translateY(8px) rotate(-45deg);
+        }
+        .s-card:hover .s-card__arrow {
+            opacity: 1; transform: translateY(0) rotate(0deg);
+            border-color: var(--white);
+            background: rgba(255,255,255,0.15);
+        }
+        .s-card__arrow svg {
+            width: 16px; height: 16px; stroke: var(--white); fill: none; stroke-width: 2;
+        }
+        @media (max-width: 768px) {
+            .services__grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 220px; }
+            .s-card--xl { grid-column: span 2; grid-row: span 1; }
+        }
+        @media (max-width: 480px) {
+            .services__grid { grid-template-columns: 1fr; grid-auto-rows: 250px; }
+            .s-card--xl { grid-column: span 1; }
+        }
+
+        /* ====== ABOUT ====== */
+        .about { background: var(--white); }
+        .about__layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: clamp(3rem, 6vw, 6rem);
+            align-items: start;
+            margin-bottom: clamp(4rem, 7vw, 7rem);
+        }
+        .about__layout--reverse {
+            grid-template-columns: 1fr 1.2fr;
+        }
+        .about__layout--reverse .about__img { order: 2; }
+        .about__img {
+            position: relative;
+        }
+        .about__img img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: 16px;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+        }
+        .about__img:hover img {
+            transform: scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+        }
+        .about__img-accent {
+            position: absolute;
+            top: -12px; left: -12px;
+            width: 80px; height: 80px;
+            border-top: 3px solid var(--red);
+            border-left: 3px solid var(--red);
+            border-radius: 4px 0 0 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .about__text h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3vw, 2.8rem);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+        }
+        .about__text p {
+            font-size: 0.92rem; font-weight: 300;
+            color: var(--grey-500); line-height: 1.85;
+            margin-bottom: 1rem;
+        }
+        .about__text p strong { color: var(--black); font-weight: 600; }
+        .about__stats {
+            display: flex; gap: 3rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--grey-100);
+        }
+        .stat__number {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            color: var(--red); line-height: 1;
+        }
+        .stat__label {
+            font-size: 0.72rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--grey-500); margin-top: 0.2rem;
+        }
+
+        /* Slogan highlight */
+        .slogan-band {
+            background: var(--black);
+            padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 4rem);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .slogan-band__bg {
+            position: absolute; inset: 0;
+            font-family: var(--font-display);
+            font-size: clamp(6rem, 18vw, 14rem);
+            color: rgba(255,255,255,0.02);
+            display: flex; align-items: center; justify-content: center;
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+        }
+        .slogan-band__inner { position: relative; z-index: 1; max-width: 750px; }
+        .slogan-band__inner h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        .slogan-band__inner p {
+            font-size: 0.9rem; font-weight: 300;
+            color: var(--grey-300); line-height: 1.8;
+        }
+        .slogan-band__inner .damion {
+            font-family: var(--font-accent);
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            color: var(--red);
+            display: block;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .about__layout, .about__layout--reverse {
+                grid-template-columns: 1fr;
+            }
+            .about__layout--reverse .about__img { order: 0; }
+            .about__stats { gap: 2rem; }
+        }
+
+        /* ====== VALUES ====== */
+        .values { background: var(--off-white); }
+        .values__grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .v-card {
+            padding: clamp(2rem, 3vw, 3rem);
+            background: var(--white);
+            border-radius: 16px;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid var(--grey-100);
+        }
+        .v-card::after {
+            content: ''; position: absolute;
+            bottom: 0; left: 12px; right: 12px; width: auto; height: 3px;
+            background: var(--red);
+            border-radius: 3px 3px 0 0;
+            transform: scaleX(0);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .v-card:hover::after { transform: scaleX(1); }
+        .v-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+            border-color: transparent;
+        }
+        .v-card__num {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--grey-100);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            transition: color 0.4s ease;
+        }
+        .v-card:hover .v-card__num { color: var(--red); }
+        .v-card__title {
+            font-family: var(--font-display);
+            font-size: clamp(1.3rem, 1.8vw, 1.6rem);
+            margin-bottom: 1rem;
+        }
+        .v-card__desc {
+            font-size: 0.85rem; font-weight: 300;
+            color: var(--grey-500); line-height: 1.75;
+        }
+        @media (max-width: 900px) {
+            .values__grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+        }
+        @media (max-width: 480px) {
+            .values__grid { grid-template-columns: 1fr; }
+        }
+
+        /* ====== GALLERY ====== */
+        .gallery { background: var(--black); }
+        .gallery__header {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            flex-wrap: wrap; gap: 2rem;
+            margin-bottom: clamp(3rem, 5vw, 4rem);
+        }
+        .gallery__grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 280px 280px;
+            gap: 12px;
+        }
+        .g-item {
+            position: relative; overflow: hidden;
+            border-radius: 14px;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+        }
+        .g-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+        }
+        .g-item:first-child { grid-row: span 2; }
+        .g-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 14px;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+        }
+        .g-item:hover img { transform: scale(1.06); filter: brightness(0.75); }
+        .g-item__overlay {
+            position: absolute; inset: 0;
+            border-radius: 14px;
+            background: rgba(10,10,10,0);
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.4s ease;
+        }
+        .g-item:hover .g-item__overlay { background: rgba(227,6,19,0.15); }
+        .g-item__overlay svg {
+            width: 44px; height: 44px;
+            stroke: var(--white); fill: none; stroke-width: 1.5;
+            opacity: 0; transform: scale(0.5) rotate(-90deg);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+        }
+        .g-item:hover .g-item__overlay svg { opacity: 1; transform: scale(1) rotate(0deg); }
+        @media (max-width: 768px) {
+            .gallery__grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+            }
+            .g-item:first-child { grid-row: span 1; }
+            .g-item img { aspect-ratio: 4/3; }
+        }
+
+        /* ====== CONTACT ====== */
+        .contact { background: var(--white); }
+        .contact__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(3rem, 6vw, 6rem);
+        }
+        .contact__info h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1.3rem, 2vw, 1.6rem);
+            margin-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+        .contact__info h3:first-child { margin-top: 0; }
+        .contact__info p, .contact__info a {
+            font-size: 0.88rem; font-weight: 300;
+            color: var(--grey-500); line-height: 1.8;
+        }
+        .contact__info a:hover { color: var(--red); }
+        .contact__phone {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: var(--black); display: block;
+            margin: 0.5rem 0; transition: color 0.3s ease;
+        }
+        .contact__phone:hover { color: var(--red); }
+        .contact__hours table { border-collapse: collapse; width: 100%; }
+        .contact__hours td {
+            padding: 10px 0;
+            font-size: 0.85rem; font-weight: 300;
+            color: var(--grey-500);
+            border-bottom: 1px solid var(--grey-100);
+        }
+        .contact__hours td:first-child { font-weight: 600; color: var(--black); width: 40%; }
+        .contact__social { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
+        .contact__social a {
+            width: 44px; height: 44px;
+            background: var(--black);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .contact__social a:hover { background: var(--red); transform: translateY(-3px) rotate(5deg); box-shadow: 0 8px 20px rgba(227,6,19,0.3); }
+        .contact__social svg { width: 18px; height: 18px; stroke: var(--white); fill: none; stroke-width: 1.5; }
+        .contact__form-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: clamp(2rem, 3vw, 3rem);
+            border: 1px solid var(--grey-100);
+            position: relative;
+        }
+        .contact__form-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.3rem, 2vw, 1.6rem);
+            margin-bottom: 1.5rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--grey-700);
+            margin-bottom: 6px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            color: var(--black);
+            background: var(--off-white);
+            border: 1.5px solid var(--grey-100);
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            -webkit-appearance: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--red);
+            box-shadow: 0 0 0 3px rgba(227,6,19,0.1);
+        }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--grey-300);
+        }
+        .form-group select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .btn--full { width: 100%; justify-content: center; }
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .form-success.show {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            animation: fadeSlideUp 0.5s ease;
+        }
+        .form-success p {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--black);
+        }
+        @media (max-width: 480px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .contact__grid { grid-template-columns: 1fr; }
+        }
+
+        /* ====== FOOTER ====== */
+        .footer {
+            background: var(--black);
+            padding: clamp(3rem, 5vw, 4rem) clamp(1.5rem, 4vw, 4rem) clamp(1.5rem, 3vw, 2rem);
+        }
+        .footer__top {
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .footer__logos { display: flex; align-items: center; gap: 2rem; }
+        .footer__logos img { height: 28px; filter: brightness(0) invert(1); opacity: 0.5; }
+        .footer__links { display: flex; gap: 2rem; }
+        .footer__links a {
+            font-size: 0.75rem; color: var(--grey-500);
+            transition: color 0.3s ease;
+        }
+        .footer__links a:hover { color: var(--white); }
+        .footer__bottom {
+            display: flex; justify-content: space-between; flex-wrap: wrap;
+            gap: 1rem; margin-top: 1.5rem;
+        }
+        .footer__bottom p { font-size: 0.7rem; color: var(--grey-500); }
+        .footer__bottom .damion {
+            font-family: var(--font-accent);
+            font-size: 0.85rem; color: var(--red);
+        }
+
+        /* ====== SCROLL TOP ====== */
+        .scroll-top {
+            position: fixed; bottom: 2rem; right: 2rem;
+            width: 48px; height: 48px;
+            background: var(--red); border: none;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 100;
+            opacity: 0; transform: translateY(20px) scale(0.8);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+        .scroll-top.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .scroll-top:hover { background: var(--red-dark); transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 25px rgba(227,6,19,0.35); }
+        .scroll-top svg { width: 18px; height: 18px; stroke: var(--white); fill: none; stroke-width: 2.5; }
+
+        /* ====== REVEALS ====== */
+        .reveal {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: none; }
+        [data-delay="1"] { transition-delay: 0.1s; }
+        [data-delay="2"] { transition-delay: 0.2s; }
+        [data-delay="3"] { transition-delay: 0.3s; }
+        [data-delay="4"] { transition-delay: 0.35s; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== NAV ==================== -->
+<nav class="nav" id="nav">
+    <a href="#"><img src="https://www.acw-carrosserie.fr/smarty/wireframe24/media/images/logo.png" alt="ACW Carrosserie" class="nav__logo"></a>
+    <div class="nav__links">
+        <a href="#services">Prestations</a>
+        <a href="#about">L'atelier</a>
+        <a href="#values">Nos valeurs</a>
+        <a href="#gallery">Réalisations</a>
+    </div>
+    <a href="#contact" class="nav__cta-link">Contactez-nous</a>
+    <div class="nav__burger" id="burger"><span></span><span></span><span></span></div>
+</nav>
+<div class="nav__mobile" id="mobileMenu">
+    <a href="#services" onclick="closeMenu()">Prestations</a>
+    <a href="#about" onclick="closeMenu()">L'atelier</a>
+    <a href="#values" onclick="closeMenu()">Nos valeurs</a>
+    <a href="#gallery" onclick="closeMenu()">Réalisations</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+    <div class="hero__bg">
+        <img src="https://www.acw-carrosserie.fr/media/images/upload/box3.jpg" alt="Carrosserie automobile — ACW Gérardmer">
+    </div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+        <p class="hero__accent">Votre artisan carrossier à Gérardmer</p>
+        <h1 class="hero__title">
+            <span class="line"><span>CARROSSERIE</span></span>
+            <span class="line"><span>À <em>GÉRARDMER</em></span></span>
+        </h1>
+        <p class="hero__subtitle">Une entreprise automobile fiable née d'une passion. ACW Carrosserie intervient sur motos, voitures familiales, citadines, utilitaires professionnels, 4x4…</p>
+        <div class="hero__actions">
+            <a href="#contact" class="btn btn--red">
+                Prendre rendez-vous
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="tel:0329501959" class="btn btn--ghost">03 29 50 19 59</a>
+        </div>
+    </div>
+    <div class="hero__scroll">
+        <span>Scroll</span>
+        <div class="hero__scroll-line"></div>
+    </div>
+</section>
+
+<!-- ==================== OFFERS BANNER ==================== -->
+<section class="offers-banner">
+    <div class="offers-banner__bg">
+        <img src="https://www.acw-carrosserie.fr/media/images/upload/box5.jpg" alt="Surface automobile">
+    </div>
+    <div class="offers-banner__overlay"></div>
+    <div class="offers-banner__top-line"></div>
+    <div class="offers-banner__bottom-line"></div>
+    <div class="offers-banner__content">
+        <div class="offers-banner__reseau">
+            <span class="offers-banner__reseau-text">ACW membre du réseau</span>
+            <a href="https://www.zecarrossery.fr/" target="_blank" rel="noopener">
+                <img src="https://www.acw-carrosserie.fr/media/images/upload/logo-carrossery-pare-brise.png" alt="Ze Carrossery & Ze Pare-Brise">
+            </a>
+        </div>
+        <div class="offers-banner__circles">
+            <div class="offer-circle">
+                <div class="offer-circle__icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10l4-4 4 4M8 14l4 4 4-4"/></svg>
+                </div>
+                <span class="offer-circle__question">Responsable ?</span>
+                <div class="offer-circle__title">FRANCHISE<br>REMBOURSÉE</div>
+                <span class="offer-circle__amount-label">jusqu'à</span>
+                <span class="offer-circle__amount">400€</span>
+            </div>
+            <div class="offer-circle">
+                <div class="offer-circle__icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1"/><path d="M10 8h6a2 2 0 012 2v9a2 2 0 01-2 2h-6"/><path d="M6 14h2"/></svg>
+                </div>
+                <span class="offer-circle__question">Pas responsable ?</span>
+                <div class="offer-circle__title">CARBURANT<br>OFFERT</div>
+                <span class="offer-circle__amount-label">jusqu'à</span>
+                <span class="offer-circle__amount">250€</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SERVICES ==================== -->
+<section class="services section-pad" id="services">
+    <div class="services__header">
+        <div class="reveal">
+            <div class="section-label">Nos prestations</div>
+            <h2 class="section-title">NOMBREUX SERVICES,<br>DE LA PEINTURE<br>AU DÉBOSSELAGE</h2>
+        </div>
+        <p class="reveal" data-delay="1">ACW Carrosserie propose des services variés avec des solutions innovantes et un excellent rapport qualité-prix.</p>
+    </div>
+    <div class="services__grid">
+        <div class="s-card s-card--xl">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/box3.jpg" alt="Carrosserie" loading="lazy">
+            <div class="s-card__info">
+                <span class="s-card__num">01</span>
+                <h3 class="s-card__title">CARROSSERIE</h3>
+                <p class="s-card__sub">Carrossier à Gérardmer — Le Tholy, Granges-Aumontzey, La Bresse</p>
+            </div>
+            <div class="s-card__arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
+        </div>
+        <div class="s-card">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/box2.jpg" alt="Peinture automobile" loading="lazy">
+            <div class="s-card__info">
+                <span class="s-card__num">02</span>
+                <h3 class="s-card__title">PEINTURE AUTOMOBILE</h3>
+                <p class="s-card__sub">Gérardmer — Vosges</p>
+            </div>
+            <div class="s-card__arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
+        </div>
+        <div class="s-card">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/box4.jpg" alt="Débosselage sans peinture" loading="lazy">
+            <div class="s-card__info">
+                <span class="s-card__num">03</span>
+                <h3 class="s-card__title">DÉBOSSELAGE SANS PEINTURE</h3>
+                <p class="s-card__sub">Gérardmer — Vosges</p>
+            </div>
+            <div class="s-card__arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
+        </div>
+        <div class="s-card">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/box6.jpg" alt="Remplacement pare-brise" loading="lazy">
+            <div class="s-card__info">
+                <span class="s-card__num">04</span>
+                <h3 class="s-card__title">REMPLACEMENT PARE-BRISE</h3>
+                <p class="s-card__sub">Gérardmer — Vosges</p>
+            </div>
+            <div class="s-card__arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
+        </div>
+        <div class="s-card">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/box5.jpg" alt="Réparation vitrage auto" loading="lazy">
+            <div class="s-card__info">
+                <span class="s-card__num">05</span>
+                <h3 class="s-card__title">RÉPARATION VITRAGE AUTO</h3>
+                <p class="s-card__sub">Gérardmer — Vosges</p>
+            </div>
+            <div class="s-card__arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
+        </div>
+        <div class="s-card">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/box7.jpg" alt="Rénovation optique de phare" loading="lazy">
+            <div class="s-card__info">
+                <span class="s-card__num">06</span>
+                <h3 class="s-card__title">RÉNOVATION OPTIQUE DE PHARE</h3>
+                <p class="s-card__sub">Gérardmer — Vosges</p>
+            </div>
+            <div class="s-card__arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
+        </div>
+        <div class="s-card">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/box8.jpg" alt="Vente de pneus" loading="lazy">
+            <div class="s-card__info">
+                <span class="s-card__num">07</span>
+                <h3 class="s-card__title">VENTE DE PNEUS AUTO</h3>
+                <p class="s-card__sub">Gérardmer — Vosges</p>
+            </div>
+            <div class="s-card__arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
+        </div>
+        <div class="s-card">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/box9.jpg" alt="Montage de pneus" loading="lazy">
+            <div class="s-card__info">
+                <span class="s-card__num">08</span>
+                <h3 class="s-card__title">MONTAGE DE PNEUS AUTO</h3>
+                <p class="s-card__sub">Gérardmer — Vosges</p>
+            </div>
+            <div class="s-card__arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== ABOUT ==================== -->
+<section class="about section-pad" id="about">
+    <div class="reveal" style="margin-bottom: clamp(3rem,5vw,5rem);">
+        <div class="section-label">Notre atelier</div>
+        <h2 class="section-title">UNE PASSION<br>DEVENUE MÉTIER</h2>
+    </div>
+
+    <div class="about__layout">
+        <div class="about__img">
+            <div class="about__img-accent"></div>
+            <img src="https://www.acw-carrosserie.fr/media/images/gallery/26/big/29.jpg" alt="Alexis WISSEMBERG préparant la peinture" loading="lazy">
+        </div>
+        <div class="about__text reveal" data-delay="1">
+            <h3>UNE ENTREPRISE FIABLE NÉE D'UNE PASSION</h3>
+            <p>ACW Carrosserie est une entreprise de réparation de <strong>carrosserie à Gérardmer</strong> fondée par Alexis WISSEMBERG, un jeune entrepreneur passionné par son métier. L'atelier intervient sur des motos, voitures familiales, citadines, utilitaires professionnels, 4x4…</p>
+            <p>Après avoir obtenu son CAP-BEP Carrosserie, Alexis a poursuivi sa formation en effectuant un bac professionnel en alternance au sein d'une carrosserie d'Épinal, où il a acquis une solide expérience dans le domaine de la carrosserie automobile.</p>
+            <p>C'est cette expérience de 10 ans dans le métier qui lui a permis de développer des compétences techniques et pratiques en matière de <strong>réparation de carrosserie</strong>, ainsi qu'une connaissance approfondie des différentes marques et des différents modèles de voitures.</p>
+            <div class="about__stats">
+                <div>
+                    <div class="stat__number" data-count="10">0</div>
+                    <div class="stat__label">Ans d'expérience</div>
+                </div>
+                <div>
+                    <div class="stat__number" data-count="2015">0</div>
+                    <div class="stat__label">Année de création</div>
+                </div>
+                <div>
+                    <div class="stat__number" data-count="8">0</div>
+                    <div class="stat__label">Prestations</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about__layout about__layout--reverse">
+        <div class="about__text reveal">
+            <h3>L'ESPRIT ENTREPRENEURIAL AU SERVICE DE GÉRARDMER</h3>
+            <p>Fort de son jeune esprit entrepreneurial et de sa volonté de travailler là où il a grandi, à Gérardmer, Alexis a décidé de créer sa propre structure pour répondre aux besoins des habitants de sa ville natale.</p>
+            <p>Ainsi, en 2015, il a créé ACW Carrosserie, une entreprise spécialisée dans la réparation de carrosserie automobile qui se distingue par la qualité de ses prestations, son professionnalisme et son engagement pour la satisfaction de chaque client.</p>
+            <p>Votre artisan carrossier est en mesure de fournir des conseils avisés et des solutions innovantes pour répondre aux besoins de chaque projet de réparation de carrosserie automobile, tout en assurant un excellent rapport qualité-prix.</p>
+        </div>
+        <div class="about__img">
+            <img src="https://www.acw-carrosserie.fr/media/images/gallery/26/big/30.jpg" alt="Cabine de peinture — ACW Carrosserie" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SLOGAN BAND ==================== -->
+<section class="slogan-band">
+    <div class="slogan-band__bg">LIBERTÉ</div>
+    <div class="slogan-band__inner reveal">
+        <span class="damion">Choisir librement, c'est votre droit</span>
+        <h3>VOUS POUVEZ CHOISIR LIBREMENT VOTRE ARTISAN-CARROSSIER</h3>
+        <p>Le Code des assurances vous garantit le droit de sélectionner l'artisan-carrossier qui interviendra sur votre véhicule. Votre organisme d'assurance ne peut pas vous imposer un établissement pour vos travaux de réparation automobile. ACW Carrosserie est un atelier indépendant reconnu pour son sérieux, qui intervient sur tous types de véhicules et travaille avec tous les assureurs.</p>
+    </div>
+</section>
+
+<!-- ==================== VALUES ==================== -->
+<section class="values section-pad" id="values">
+    <div class="reveal" style="margin-bottom: clamp(3rem,5vw,5rem);">
+        <div class="section-label">Nos engagements</div>
+        <h2 class="section-title">CE QUI NOUS<br>DÉFINIT</h2>
+    </div>
+    <div class="values__grid">
+        <div class="v-card reveal" data-delay="1">
+            <div class="v-card__num">01</div>
+            <h3 class="v-card__title">CONSEIL</h3>
+            <p class="v-card__desc">Un conseil personnalisé et une volonté de trouver la meilleure solution pour répondre aux besoins spécifiques de chaque client.</p>
+        </div>
+        <div class="v-card reveal" data-delay="2">
+            <div class="v-card__num">02</div>
+            <h3 class="v-card__title">SAVOIR-FAIRE</h3>
+            <p class="v-card__desc">Un savoir-faire reconnu dans la réparation et la peinture de carrosseries de tous types de véhicules, alliant qualité, précision et professionnalisme.</p>
+        </div>
+        <div class="v-card reveal" data-delay="3">
+            <div class="v-card__num">03</div>
+            <h3 class="v-card__title">QUALITÉ</h3>
+            <p class="v-card__desc">Un travail de qualité, minutieux et précis, qui garantit une réparation durable et esthétique de la carrosserie de ses clients.</p>
+        </div>
+        <div class="v-card reveal" data-delay="4">
+            <div class="v-card__num">04</div>
+            <h3 class="v-card__title">VALEURS</h3>
+            <p class="v-card__desc">Des valeurs de liberté, de choix, et d'indépendance qui sont au cœur de notre slogan "Choisir librement votre carrossier, c'est votre droit !".</p>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== GALLERY ==================== -->
+<section class="gallery section-pad" id="gallery">
+    <div class="gallery__header">
+        <div class="reveal">
+            <div class="section-label">Réalisations</div>
+            <h2 class="section-title section-title--white">L'ATELIER<br>EN IMAGES</h2>
+        </div>
+    </div>
+    <div class="gallery__grid">
+        <div class="g-item">
+            <img src="https://www.acw-carrosserie.fr/media/images/gallery/26/big/29.jpg" alt="Préparation peinture" loading="lazy">
+            <div class="g-item__overlay"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </div>
+        <div class="g-item">
+            <img src="https://www.acw-carrosserie.fr/media/images/gallery/26/big/27.jpg" alt="Renault Clio en réparation" loading="lazy">
+            <div class="g-item__overlay"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </div>
+        <div class="g-item">
+            <img src="https://www.acw-carrosserie.fr/media/images/gallery/26/big/28.jpg" alt="Détail carrosserie" loading="lazy">
+            <div class="g-item__overlay"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </div>
+        <div class="g-item">
+            <img src="https://www.acw-carrosserie.fr/media/images/gallery/26/big/30.jpg" alt="Cabine de peinture" loading="lazy">
+            <div class="g-item__overlay"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section class="contact section-pad" id="contact">
+    <div class="reveal" style="margin-bottom: clamp(3rem,5vw,5rem);">
+        <div class="section-label">Contact</div>
+        <h2 class="section-title">PRENEZ<br>RENDEZ-VOUS</h2>
+    </div>
+    <div class="contact__grid">
+        <div class="contact__info reveal">
+            <h3>TÉLÉPHONE</h3>
+            <a href="tel:0329501959" class="contact__phone">03 29 50 19 59</a>
+            <h3>EMAIL</h3>
+            <p><a href="mailto:contact@acw-carrosserie.com">contact@acw-carrosserie.com</a></p>
+            <h3>ADRESSE</h3>
+            <p>10 impasse des Granitiers<br>88400 Gérardmer, France</p>
+            <p style="font-size:0.8rem;margin-top:0.3rem;color:var(--grey-300);">Rapidement accessible depuis La Bresse, Le Tholy ou Granges-Aumontzey.</p>
+            <h3>HORAIRES</h3>
+            <div class="contact__hours">
+                <table>
+                    <tr><td>Lundi — Vendredi</td><td>8h-12h / 14h-18h</td></tr>
+                    <tr><td>Samedi</td><td>8h-12h</td></tr>
+                    <tr><td>Dimanche</td><td>Fermé</td></tr>
+                </table>
+            </div>
+            <div class="contact__social">
+                <a href="https://www.facebook.com/people/ACW-Carrosserie/100069791583241/" target="_blank" rel="noopener" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                </a>
+                <a href="https://maps.app.goo.gl/yDXJxAXFdRzet27NA" target="_blank" rel="noopener" aria-label="Google Maps">
+                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </a>
+            </div>
+        </div>
+        <div class="contact__form-box">
+            <h3 class="contact__form-title">ENVOYEZ-NOUS UN MESSAGE</h3>
+            <form class="contact-form" onsubmit="handleSubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fname">Prénom</label>
+                        <input type="text" id="fname" name="fname" placeholder="Votre prénom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lname">Nom</label>
+                        <input type="text" id="lname" name="lname" placeholder="Votre nom" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <input type="tel" id="phone" name="phone" placeholder="06 00 00 00 00">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Objet</label>
+                    <select id="subject" name="subject">
+                        <option value="" disabled selected>Choisir une prestation</option>
+                        <option>Carrosserie</option>
+                        <option>Peinture automobile</option>
+                        <option>Débosselage sans peinture</option>
+                        <option>Remplacement pare-brise</option>
+                        <option>Réparation vitrage</option>
+                        <option>Rénovation optique de phare</option>
+                        <option>Pneus</option>
+                        <option>Autre demande</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Décrivez votre besoin..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn--red btn--full">
+                    Envoyer le message
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                </button>
+            </form>
+            <div class="form-success" id="formSuccess">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="var(--red)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <p>Message envoyé avec succès !</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+    <div class="footer__top">
+        <div class="footer__logos">
+            <img src="https://www.acw-carrosserie.fr/smarty/wireframe24/media/images/logo.png" alt="ACW Carrosserie">
+            <img src="https://www.acw-carrosserie.fr/media/images/upload/logo-carrossery-pare-brise.png" alt="Ze Carrossery">
+        </div>
+        <div class="footer__links">
+            <a href="#">Mentions légales</a>
+            <a href="#">Confidentialité</a>
+        </div>
+    </div>
+    <div class="footer__bottom">
+        <p>© 2024 ACW Carrosserie — Tous droits réservés</p>
+        <p class="damion">Choisir librement votre carrossier, c'est votre droit !</p>
+    </div>
+</footer>
+
+<!-- Scroll Top -->
+<button class="scroll-top" id="scrollTop" aria-label="Retour en haut">
+    <svg viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<!-- ==================== JS ==================== -->
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+// Burger
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+burger.addEventListener('click', () => {
+    burger.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+function closeMenu() {
+    burger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// Reveals with stagger
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+reveals.forEach(el => revealObs.observe(el));
+
+// Counter animation
+const counters = document.querySelectorAll('[data-count]');
+const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const target = parseInt(el.dataset.count);
+        const duration = target > 100 ? 2200 : 1500;
+        const start = performance.now();
+        function tick(now) {
+            const p = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(target * eased);
+            if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        counterObs.unobserve(el);
+    });
+}, { threshold: 0.5 });
+counters.forEach(c => counterObs.observe(c));
+
+// Scroll top
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+    scrollTopBtn.classList.toggle('visible', window.scrollY > 500);
+}, { passive: true });
+scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) window.scrollTo({ top: t.offsetTop - 70, behavior: 'smooth' });
+    });
+});
+
+// Parallax hero
+window.addEventListener('scroll', () => {
+    const heroImg = document.querySelector('.hero__bg img');
+    if (heroImg) {
+        const y = window.scrollY;
+        if (y < window.innerHeight) {
+            heroImg.style.transform = `translateY(${y * 0.25}px)`;
+        }
+    }
+}, { passive: true });
+
+// 3D Tilt on service cards (desktop only)
+if (window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.s-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            card.style.transform = `
+                perspective(800px)
+                rotateY(${x * 8}deg)
+                rotateX(${-y * 8}deg)
+                translateY(-6px)
+            `;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+
+    // Magnetic effect on buttons
+    document.querySelectorAll('.btn, .nav__cta-link').forEach(btn => {
+        btn.addEventListener('mousemove', e => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = '';
+        });
+    });
+}
+
+// Parallax on about images
+window.addEventListener('scroll', () => {
+    document.querySelectorAll('.about__img img').forEach(img => {
+        const rect = img.getBoundingClientRect();
+        const viewH = window.innerHeight;
+        if (rect.top < viewH && rect.bottom > 0) {
+            const progress = (viewH - rect.top) / (viewH + rect.height);
+            img.style.transform = `translateY(${(progress - 0.5) * -20}px) scale(1.02)`;
+        }
+    });
+}, { passive: true });
+
+// Form submit
+function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const success = document.getElementById('formSuccess');
+    form.style.display = 'none';
+    success.classList.add('show');
+}
+
+// Offer circles floating animation
+document.querySelectorAll('.offer-circle').forEach((circle, i) => {
+    const delay = i * 1000;
+    function float() {
+        const t = (Date.now() + delay) * 0.001;
+        const y = Math.sin(t * 0.8) * 6;
+        circle.style.transform = `translateY(${y}px)`;
+        requestAnimationFrame(float);
+    }
+    float();
+});
+</script>
+</body>
+</html>
